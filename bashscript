@@ -1,0 +1,72 @@
+#!/bin/bash
+clear
+
+echo "List of choices"
+echo "	1. Display list of files and their permissions"
+echo "	2. Make a file executable to all"
+echo "	3. Make a directory"
+echo "	4. Make a 0-length file"
+echo "	5. Write your information to a file"
+echo "	6. Write list of tasks to a file"
+echo "	7. Change timestamp of file"
+read -p "Type in 1-7, or anything else to end: " choice
+echo "you entereeed $choice. Exxellent choice!"
+
+if (($choice == 1)); then
+	ls -l
+
+elif (($choice == 2)); then
+	echo "Choose from these files"
+	ls
+	read -p "Which file will you make executable? " name
+	echo "Here are the current permissions"
+	ls -l $name
+	touch -c $name | chmod +x $name
+	echo "Here is the new permissions of the file"
+	ls -l $name
+
+elif (($choice == 3)); then
+	read -p "Directory name? " dirname
+	mkdir $dirname
+	ls
+
+elif (($choice == 4)); then
+	read -p "File name? " filname
+	echo -n "" > $filname
+	ls
+
+elif (($choice == 5)); then
+	read -p "File name? " infofile
+	read -p "First name: " first
+	read -p "Last name: " last
+	read -p "Job title: " title
+	echo -n "$first $last is a $title" >> $infofile
+
+elif (($choice == 6)); then
+	num=1
+	read -p "File name? " list
+	read -p "how many tasks? " taskno
+	while [ $num -le $taskno ]
+	do
+		read -p "Task number $num: " task
+		echo -n "$task " >> $list
+		((num++))
+	done
+
+elif (($choice == 7)); then
+	ls -l
+	echo -e "\n"
+	files=$(ls)
+	for file in $files
+	do
+		read -p "Change timestamp of $file? (y/n)" answer
+		if [ ${answer^^} = "Y" ]; then
+			touch $file
+		fi
+	done
+	echo -e "\n"
+	ls -l
+
+else
+end
+fi
